@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
+  linkStatus = 'recipes';
+
+  getLinkStatus(event: {link: string}) {
+    this.linkStatus = event.link;
+  }
 }
