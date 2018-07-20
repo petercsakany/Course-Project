@@ -5,6 +5,15 @@ import {Directive, HostBinding, HostListener} from "@angular/core";
 })
 export class DropdownDirective {
   @HostBinding('class.open') isOpen = false;
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.isOpen = true;
+  }
+
+  @HostListener('mouseleave') onMouseLeave() {
+    this.isOpen = false;
+  }
+
   @HostListener('click') toggleOPen() {
     this.isOpen = !this.isOpen;
   }
