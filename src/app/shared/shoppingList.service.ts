@@ -5,11 +5,16 @@ import {Subject} from "rxjs/internal/Subject";
 @Injectable()
 export class ShoppingListService {
   ingredientsChanged = new Subject<Ingredient[]>();
+  ingredientEdited = new Subject<number>();
 
   private ingredients: Ingredient[] = [
     new Ingredient('Apple', 5),
     new Ingredient('Lemon', 3)
   ];
+
+  getIngredient(index: number) {
+    return this.ingredients[index];
+  }
 
   getIngredients() {
     return this.ingredients.slice();
@@ -25,13 +30,13 @@ export class ShoppingListService {
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
-  removeIngredient() {
-    this.ingredients.splice(-1,1);
+  updateIngredient(index: number, newIngredient: Ingredient) {
+    this.ingredients[index] = newIngredient;
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 
-  clearIngredients() {
-    this.ingredients.splice(0, this.ingredients.length);
+  removeIngredient(index: number) {
+    this.ingredients.splice(index,1);
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 }
