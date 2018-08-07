@@ -1,16 +1,16 @@
 import {Injectable} from "@angular/core";
 import {Recipe} from "./recipe.model";
-import {Ingredient} from "./ingredient.model";
 import {Subject} from "rxjs/internal/Subject";
+import {Http} from "@angular/http";
+import {map} from "rxjs/operators";
 
 @Injectable()
 export class RecipeService {
-  private imgPath: string = 'https://image.ibb.co/eeznEJ/pexels_photo_1243488.jpg';
-  private recipes: Recipe[] = [
-    new Recipe('Test','Simply test',this.imgPath, [new Ingredient('apple',5)]),
-    new Recipe('Test2','Simply test2',this.imgPath, [new Ingredient('pear',1)]),
-    new Recipe('Test3','Simply test3',this.imgPath, [new Ingredient('strawberry',4)])
-  ];
+
+  constructor(private http: Http) {}
+
+  private recipesUrl = "https://ng-recipe-book-b7e9c.firebaseio.com/data.json";
+  private recipes: Recipe[] = [];
 
   recipesChanged = new Subject<Recipe[]>();
 
@@ -32,8 +32,34 @@ export class RecipeService {
     this.recipesChanged.next(this.recipes.slice());
   }
 
+  updateRecipes(newRecipes: Recipe[]) {
+    this.recipes = newRecipes;
+    this.recipesChanged.next(this.recipes.slice());
+  }
+
   removeRecipe(index: number) {
     this.recipes.splice(index, 1);
     this.recipesChanged.next(this.recipes.slice());
+  }
+
+  storeRecipes() {
+    return this.http.put(this.recipesUrl,this.getRecipes());
+  }
+
+  fetchRecipes() {
+    this.http.get(this.recipesUrl).pipe(
+      map((response: Response) => {
+      return response.json();
+    }),
+      map((recipes: Recipe[]) => {
+        for (let recipe of recipes) {
+          if (!recipe['ingredients']) {
+            recipe['ingredients'] = [];
+          }
+        }
+        return recipes;
+      })).subscribe((recipes: Recipe[]) => {
+        this.updateRecipes(recipes);
+    })
   }
 }
