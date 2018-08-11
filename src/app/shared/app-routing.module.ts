@@ -6,6 +6,8 @@ import {ErrorPageComponent} from "../error-page/error-page.component";
 import {RecipeStartComponent} from "../recipes/recipe-start/recipe-start.component";
 import {RecipeDetailComponent} from "../recipes/recipe-detail/recipe-detail.component";
 import {RecipeEditComponent} from "../recipes/recipe-edit/recipe-edit.component";
+import {SignupComponent} from "../auth/signup/signup.component";
+import {SigninComponent} from "../auth/signin/signin.component";
 
 const appRoutes: Routes = [
   {path: 'recipes', component: RecipesComponent, children: [
@@ -15,6 +17,8 @@ const appRoutes: Routes = [
       {path: ':id/edit', component: RecipeEditComponent},
     ]},
   {path: 'shoppinglist', component: ShoppingListComponent},
+  {path: 'signup', component: SignupComponent},
+  {path: 'signin', component: SigninComponent},
   {path: 'not-found', component: ErrorPageComponent},
   {path: '', redirectTo: '/recipes', pathMatch: 'full'},
   {path: '**', redirectTo: '/not-found'},
